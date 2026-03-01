@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDo </title>
+    <!-- Bootstrap base -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <!-- Cute font -->
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- base style (will be augmented with theme classes) -->
+    <style id="theme-style">
+        /* CUTE THEME (default) */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: linear-gradient(145deg, #fdeff2 0%, #fff3e6 100%);
+            font-family: 'Quicksand', 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            padding-bottom: 2rem;
+            transition: background 0.3s, color 0.2s;
+        }
+
+        /* navbar */
+        .navbar.bg-dark {
+            background: #ffb6c1 !important;
+            border-bottom: 4px solid #ffe4e9;
+            box-shadow: 0 6px 12px rgba(255, 160, 180, 0.2);
+            transition: 0.3s;
+        }
+        .navbar .navbar-brand {
+            font-weight: 700;
+            font-size: 1.9rem;
+            color: #fff0f3 !important;
+            letter-spacing: 1px;
+            text-shadow: 3px 3px 0 #f88f9f;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .navbar-brand span.badge {
+            background-color: #ffe75e !important;
+            color: #9b4b6e;
+            font-size: 1.3rem;
+            font-weight: 700;
+            padding: 8px 14px;
+            border-radius: 50px;
+            box-shadow: 0 4px 0 #e0a86e;
+            transition: 0.2s;
+            border: 2px solid white;
+        }
+
+        /* main container */
+        .container {
+            background-color: rgba(255, 245, 240, 0.7);
+            backdrop-filter: blur(2px);
+            border-radius: 60px 60px 40px 40px;
+            padding: 25px 30px !important;
+            box-shadow: 0 20px 30px rgba(252, 161, 179, 0.2), 0 6px 12px rgba(255, 200, 200, 0.3);
+            border: 3px solid white;
+            margin-top: 25px;
+            transition: 0.3s;
+        }
+
+        /* input group */
+        .input-group {
+            background: #fff9fb;
+            border-radius: 70px;
+            padding: 6px 6px 6px 20px;
+            box-shadow: 0 10px 0 #ffd9df, 0 8px 15px #ffc1cc;
+            border: 3px solid white;
+        }
+        .input-group .form-control {
+            border: none;
+            background: transparent;
+            font-size: 1.3rem;
+            padding: 12px 8px;
+            font-weight: 600;
+            color: #a6536b;
+            letter-spacing: 0.5px;
+            font-family: 'Quicksand', sans-serif;
+        }
+        .input-group .form-control::placeholder {
+            color: #fbb9c7;
+            font-weight: 500;
+        }
+        .input-group .btn-dark {
+            background: #fea1b3;
+            border: none;
+            border-radius: 60px !important;
+            color: white;
+            font-weight: 700;
+            font-size: 1.35rem;
+            padding: 12px 30px;
+            box-shadow: 0 7px 0 #cf7a8b, 0 6px 12px #ffa5b7;
+            border: 3px solid #fff;
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        /* lists */
+        .list-group {
+            border-radius: 35px !important;
+            border: 3px solid white;
+            background: #fffcfd;
+            padding: 12px 8px;
+            box-shadow: 0 12px 0 #ffd3dc;
+        }
+        #todo.list-group, #done.list-group {
+            background: #fff6f9;
+        }
+        #done.list-group {
+            opacity: 1 !important;
+            background: #f6ecf0;
+            box-shadow: 0 12px 0 #ebc2cd;
+            border: 3px dashed #ffb8c6;
+        }
+
+        /* task items */
+        .list-group-item {
+            background: #ffffffd9;
+            border-radius: 50px !important;
+            border: 3px solid #ffe3e9 !important;
+            margin-bottom: 10px;
+            padding: 14px 22px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #864d5e;
+            box-shadow: 0 5px 0 #fec9d2, 0 8px 14px #ffdbe1;
+            font-family: 'Quicksand', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        /* icons */
+        .list-group-item a {
+            font-size: 1.5rem;
+            margin: 0 6px;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border: 3px solid #ffd3dc;
+            box-shadow: 0 3px 0 #e1aab5;
+            color: #c15873;
+            text-decoration: none;
+        }
+        .list-group-item a.fa-check {
+            color: #50c878;
+            border-color: #b1f0c1;
+            background: #e2ffe7;
+            box-shadow: 0 3px 0 #91bf9b;
+        }
+        .list-group-item a.fa-trash {
+            color: #f28b82;
+            border-color: #ffc3bc;
+            background: #fff2f0;
+            box-shadow: 0 3px 0 #daa8a2;
+        }
+        /* done items */
+        #done .list-group-item {
+            background: #f3e4e9;
+            color: #b28796;
+            text-decoration: line-through 3px #f9acb8;
+            border-color: #fed3de !important;
+            box-shadow: 0 4px 0 #dcb5bf;
+            font-style: italic;
+        }
+
+        /* history panel */
+        .history-container {
+            background: #fff1f5;
+            border-radius: 50px 50px 30px 30px;
+            border: 3px solid white;
+            padding: 20px 20px 10px 20px;
+            margin-top: 35px;
+            box-shadow: 0 15px 0 #fbc1cd, 0 10px 20px #fec9d2;
+        }
+        .history-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #9f6072;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-shadow: 2px 2px 0 #ffd7e0;
+        }
+        #historyList {
+            list-style: none;
+            padding: 0 8px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        #historyList li {
+            background: #ffeef2;
+            border-radius: 40px;
+            border: 3px solid white;
+            margin-bottom: 12px;
+            padding: 12px 25px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #8c5669;
+            box-shadow: 0 4px 0 #fbb8c7;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .history-stamp {
+            margin-left: auto;
+            background: #fccfda;
+            padding: 5px 16px;
+            border-radius: 40px;
+            color: #784b59;
+            font-weight: 600;
+            border: 2px solid white;
+        }
+        .clear-history-btn {
+            background: #ffc2ce;
+            border: 3px solid white;
+            border-radius: 50px;
+            padding: 10px 25px;
+            font-weight: 700;
+            color: #784153;
+            box-shadow: 0 7px 0 #dd9faf;
+            font-size: 1.2rem;
+            margin-top: 8px;
+        }
+        /* theme button */
+        .theme-btn {
+            background: #ffe0e8;
+            border: 4px solid white;
+            border-radius: 60px;
+            padding: 12px 25px;
+            font-weight: 700;
+            color: #874d61;
+            box-shadow: 0 7px 0 #e0a7b4;
+            font-size: 1.3rem;
+            transition: 0.2s;
+            margin-bottom: 10px;
+            width: fit-content;
+        }
+        .theme-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 0 #e0a7b4;
+        }
+        .theme-btn i {
+            margin-right: 8px;
+        }
+
+        /* DARK THEME */
+        body.dark-theme {
+            background: #2b2b2b;
+            background: linear-gradient(145deg, #2d2d2d, #1e1e1e);
+        }
+        body.dark-theme .navbar.bg-dark {
+            background: #4a3f42 !important;
+            border-bottom: 4px solid #7a5f66;
+        }
+        body.dark-theme .container {
+            background: rgba(40, 35, 35, 0.8);
+            border-color: #a77c84;
+        }
+        body.dark-theme .list-group-item {
+            background: #3b3134;
+            color: #f0ced6;
+            border-color: #a1737e !important;
+        }
+        body.dark-theme .input-group,
+        body.dark-theme .history-container {
+            background: #402f34;
+            border-color: #ab7f8a;
+        }
+        /* continue dark overrides (abbreviated but functional) */
+        body.dark-theme .list-group-item a {
+            background: #5b4248;
+            border-color: #ad7d8a;
+        }
+        /* ... additional dark styles will be handled by theme changer via class toggles */
+
+        /* PASTEL theme (light mint) */
+        body.pastel-theme {
+            background: #cfe8dc;
+            background: linear-gradient(145deg, #d7f0e6, #c0e2d4);
+        }
+        body.pastel-theme .navbar.bg-dark {
+            background: #a8d5c5 !important;
+            border-bottom: 4px solid #b8e6d4;
+        }
+        /* similar overrides - dynamic theme handled by js + class */
+    </style>
+</head>
+<body>
+    <nav class="navbar bg-dark navbar-dark">
+        <div class="container" style="max-width: 600px; background: transparent; box-shadow: none; border: none; backdrop-filter: none;">
+            <a href="#" class="navbar-brand">
+                📝 Todo · student <span class="badge bg-danger ms-2">0</span>
+            </a>
+            <!-- THEME CHANGER BUTTON (cute icon) -->
+            <button class="theme-btn" id="themeToggle"><i class="fa-solid fa-palette"></i> theme</button>
+        </div>
+    </nav>
+
+    <div class="container" style="max-width: 600px">
+        <div class="input-group my-4">
+            <input type="text" class="form-control" placeholder="e.g. read chapter 5 📖">
+            <button class="btn btn-dark">Add ✨</button>
+        </div>
+        
+        <ul id="todo" class="list-group"></ul>
+        <ul id="done" class="list-group mt-4 opacity-50"></ul>
+
+        <!-- history section -->
+        <div class="history-container">
+            <div class="history-title">
+                <i class="fa-regular fa-clock"></i>  history · completed
+            </div>
+            <ul id="historyList">
+                <!-- dynamic history items -->
+            </ul>
+            <button class="clear-history-btn" id="clearHistoryBtn"><i class="fa-regular fa-trash-can me-2"></i>wipe history</button>
+        </div>
+    </div>
+
+    <script>
+        // ========== STORAGE & DATA ==========
+        (function initializeStorage() {
+            if (!localStorage.getItem("cuteStudentData")) {
+                if (localStorage.getItem("data")) {
+                    let old = JSON.parse(localStorage.getItem("data"));
+                    localStorage.setItem("cuteStudentData", JSON.stringify(old));
+                } else {
+                    localStorage.setItem("cuteStudentData", "[]");
+                }
+            }
+            if (!localStorage.getItem("completedHistory")) {
+                localStorage.setItem("completedHistory", "[]");
+            }
+            // theme preference
+            if (!localStorage.getItem("selectedTheme")) {
+                localStorage.setItem("selectedTheme", "cute");  // default
+            }
+        })();
+
+        // get tasks
+        function getData() {
+            return JSON.parse(localStorage.getItem("cuteStudentData")) || [];
+        }
+
+        // get history
+        function getHistory() {
+            return JSON.parse(localStorage.getItem("completedHistory")) || [];
+        }
+
+        function saveHistory(historyArr) {
+            localStorage.setItem("completedHistory", JSON.stringify(historyArr));
+        }
+
+        function addToHistory(completedText) {
+            let history = getHistory();
+            let timestamp = new Date().toLocaleString(undefined, {
+                month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+            });
+            history.push({ text: completedText, doneAt: timestamp });
+            saveHistory(history);
+            renderHistory();
+        }
+
+        function removeFromHistoryByText(text) {
+            let history = getHistory();
+            let newHistory = history.filter(entry => entry.text !== text);
+            saveHistory(newHistory);
+            renderHistory();
+        }
+
+        function clearHistory() {
+            localStorage.setItem("completedHistory", "[]");
+            renderHistory();
+        }
+
+        function renderHistory() {
+            const historyEl = document.getElementById("historyList");
+            const history = getHistory();
+            if (history.length === 0) {
+                historyEl.innerHTML = `<li style="background: #ffeef2; justify-content: center; gap: 6px; color: #b58b99;"><i class="fa-regular fa-star"></i> no history yet, complete some tasks!</li>`;
+                return;
+            }
+            let htmlStr = '';
+            history.slice().reverse().forEach(entry => {
+                htmlStr += `<li>
+                    <i class="fa-regular fa-circle-check"></i>
+                    <span>${escapeHtml(entry.text)}</span>
+                    <span class="history-stamp">${escapeHtml(entry.doneAt)}</span>
+                </li>`;
+            });
+            historyEl.innerHTML = htmlStr;
+        }
+
+        function escapeHtml(unsafe) {
+            return unsafe.replace(/[&<>"]/g, function(m) {
+                if(m === '&') return '&amp;'; if(m === '<') return '&lt;'; if(m === '>') return '&gt;'; if(m === '"') return '&quot;';
+                return m;
+            });
+        }
+
+        function saveData(tasks) {
+            localStorage.setItem("cuteStudentData", JSON.stringify(tasks));
+        }
+
+        function updateCount() {
+            document.querySelector(".badge").textContent =
+                document.querySelectorAll("#todo li").length;
+        }
+
+        // ----- core functions -----
+        function checkData(text) {
+            let data = getData();
+            let found = false;
+            let result = data.map(item => {
+                if (item.text === text && !item.done) {
+                    item.done = true;
+                    found = true;
+                }
+                return item;
+            });
+            if (found) {
+                addToHistory(text);
+            }
+            localStorage.setItem("cuteStudentData", JSON.stringify(result));
+        }
+
+        function deleteData(text) {
+            let data = getData();
+            removeFromHistoryByText(text);
+            let result = data.filter(item => item.text !== text);
+            localStorage.setItem("cuteStudentData", JSON.stringify(result));
+        }
+
+        function saveNewTask(text) {
+            let data = getData();
+            data.push({ text, done: false });
+            localStorage.setItem("cuteStudentData", JSON.stringify(data));
+        }
+
+        function createItem(text, done = false) {
+            let li = document.createElement("li");
+            li.classList.add("list-group-item");
+
+            let textSpan = document.createElement("span");
+            textSpan.textContent = text;
+            li.appendChild(textSpan);
+
+            let iconWrap = document.createElement("span");
+            iconWrap.style.display = "flex";
+            iconWrap.style.gap = "10px";
+            iconWrap.style.alignItems = "center";
+
+            if (!done) {
+                let check = document.createElement("a");
+                check.setAttribute("href", "#");
+                check.classList.add("fa-solid", "fa-check", "me-1");
+                check.style.float = "none";
+                check.onclick = (e) => {
+                    e.preventDefault();
+                    document.querySelector("#done").appendChild(li);
+                    check.remove();
+                    updateCount();
+                    checkData(text);
+                };
+                iconWrap.appendChild(check);
+            }
+
+            let del = document.createElement("a");
+            del.setAttribute("href", "#");
+            del.classList.add("fa-solid", "fa-trash", "text-danger");
+            del.style.float = "none";
+            del.onclick = (e) => {
+                e.preventDefault();
+                li.remove();
+                updateCount();
+                deleteData(text);
+            };
+            iconWrap.appendChild(del);
+
+            li.appendChild(iconWrap);
+
+            if (done) {
+                document.querySelector("#done").appendChild(li);
+                // migrate old done to history if missing
+                (function ensureHistoryMigration(text) {
+                    let history = getHistory();
+                    let exists = history.some(entry => entry.text === text);
+                    if (!exists) {
+                        history.push({ text, doneAt: "📅 earlier" });
+                        saveHistory(history);
+                        renderHistory();
+                    }
+                })(text);
+            } else {
+                document.querySelector("#todo").appendChild(li);
+            }
+        }
+
+        // load all tasks
+        function loadAllTasks() {
+            document.querySelector("#todo").innerHTML = "";
+            document.querySelector("#done").innerHTML = "";
+            let tasks = getData();
+            tasks.forEach(item => {
+                createItem(item.text, item.done);
+            });
+            updateCount();
+        }
+
+        // ========== THEME CHANGER ==========
+        function setTheme(themeName) {
+            // remove any existing theme classes
+            document.body.classList.remove('dark-theme', 'pastel-theme', 'cute-theme');
+            if (themeName === 'dark') {
+                document.body.classList.add('dark-theme');
+            } else if (themeName === 'pastel') {
+                document.body.classList.add('pastel-theme');
+            } else {
+                // cute (default) – no special class, but we can keep it clean
+                // optionally add cute-theme if needed, but default style is cute.
+                document.body.classList.add('cute-theme'); // just for consistency
+            }
+            localStorage.setItem("selectedTheme", themeName);
+            updateThemeButtonIcon(themeName);
+        }
+
+        function updateThemeButtonIcon(theme) {
+            let btn = document.getElementById("themeToggle");
+            if (theme === 'dark') {
+                btn.innerHTML = '<i class="fa-solid fa-moon"></i> dark';
+            } else if (theme === 'pastel') {
+                btn.innerHTML = '<i class="fa-solid fa-seedling"></i> pastel';
+            } else {
+                btn.innerHTML = '<i class="fa-solid fa-palette"></i> cute';
+            }
+        }
+
+        // cycle theme: cute -> dark -> pastel -> cute
+        function cycleTheme() {
+            let current = localStorage.getItem("selectedTheme") || 'cute';
+            if (current === 'cute') {
+                setTheme('dark');
+            } else if (current === 'dark') {
+                setTheme('pastel');
+            } else {
+                setTheme('cute');
+            }
+        }
+
+        // apply saved theme on load
+        let savedTheme = localStorage.getItem("selectedTheme") || 'cute';
+        setTheme(savedTheme);
+
+        document.getElementById("themeToggle").addEventListener("click", cycleTheme);
+
+        // ========== EVENT LISTENERS ==========
+        document.querySelector("input").onkeydown = e => {
+            if(e.key == "Enter") {
+                document.querySelector("button").onclick();
+            }
+        };
+
+        document.querySelector("button").onclick = () => {
+            let text = document.querySelector("input").value.trim();
+            if(text == "") {
+                document.querySelector("input").style.transform = "rotate(1deg) scale(1.02)";
+                setTimeout(() => document.querySelector("input").style.transform = "", 200);
+                return false;
+            }
+            createItem(text, false);
+            updateCount();
+            saveNewTask(text);
+            document.querySelector("input").value = "";
+            document.querySelector("input").focus();
+        };
+
+        document.getElementById("clearHistoryBtn").addEventListener("click", function() {
+            clearHistory();
+        });
+
+        // initial renders
+        loadAllTasks();
+        renderHistory();
+
+        // additional style for dark/pastel (quick overrides, we enhance with dynamic style)
+        // (we can also inject extra style rules, but theme classes will handle main looks)
+    </script>
+    <!-- tiny footer -->
+    <div style="text-align: center; margin-top: 10px; font-size: 1.2rem; color: #cc8f9f; font-weight: 600; font-family: 'Quicksand';">⭐ click theme to switch mood ⭐</div>
+</body>
+</html>
